@@ -210,24 +210,13 @@ export const getWorkspaces = async (id, email) =>
   });
 
 export const getWorkspacePaths = async () => {
-  const [workspaces, domains] = await Promise.all([
-    prisma.workspace.findMany({
-      select: { slug: true },
-      where: { deletedAt: null },
-    }),
-    prisma.domain.findMany({
-      select: { name: true },
-      where: { deletedAt: null },
-    }),
-  ]);
-  return [
-    ...workspaces.map((workspace) => ({
-      params: { site: workspace.slug },
-    })),
-    ...domains.map((domain) => ({
-      params: { site: domain.name },
-    })),
-  ];
+  const workspaces = await prisma.workspace.findMany({
+    select: { slug: true },
+    where: { deletedAt: null },
+  });
+  return workspaces.map((workspace) => ({
+    params: { site: workspace.slug },
+  }));
 };
 
 export const inviteUsers = async (id, email, members, slug) => {

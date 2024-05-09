@@ -39,6 +39,8 @@ model Workspace {
   id           String   @id @default(cuid())
   workspaceCode String   @unique
   inviteCode   String   @unique
+  slug         String   @unique
+  deletedAt    DateTime?
 
   @@map("workspaces")
 }
