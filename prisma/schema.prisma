@@ -32,4 +32,13 @@ model User {
   @@map("users")
 }
 
+// Workspace model definition
+model Workspace {
+  id           String   @id @default(cuid())
+  workspaceCode String   @unique
+  inviteCode   String   @unique
+
+  @@map("workspaces")
+}
+
 // ... (rest of the file remains unchanged)
