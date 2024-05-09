@@ -1,5 +1,6 @@
 import Meta from '@/components/Meta/index';
 import { LandingLayout } from '@/layouts/index';
+import UserProfile from '@/components/UserProfile';
 import {
   CallToAction,
   Features,
@@ -19,6 +20,7 @@ const Home = () => {
       />
       <Hero />
       <Features />
+      <UserProfile /> {/* Added UserProfile component to the main page */}
       <Pricing />
       <Guides />
       <Testimonial />
