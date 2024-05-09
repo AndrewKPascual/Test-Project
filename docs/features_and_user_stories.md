@@ -26,3 +26,13 @@
 
 ## Interactive Learning
 - As a user, I want to engage with interactive questions similar to Duolingo's language questions, to educate myself on health optimization in an enjoyable way.
+
+## Gamification Features
+- As a user, I want to participate in a leveling system where I can level up by completing health tasks and challenges, to stay motivated and see my progress.
+- As a user, I want to unlock new levels or badges as I reach new milestones in my health journey, to feel rewarded for my efforts.
+- As a user, I want to receive notifications of new challenges and rewards, to keep me engaged with the app.
+
+## Educational Quizzes and Articles
+- As a user, I want to take short, informative quizzes that test my knowledge on nutrition and exercise, to reinforce learning and provide a fun challenge.
+- As a user, I want to read articles and watch videos curated by health experts, to stay informed about the best practices for healthy living.
+- As a user, I want the educational content to be personalized based on my health goals and interests, to make learning more relevant and effective.

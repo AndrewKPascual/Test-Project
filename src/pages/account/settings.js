@@ -10,6 +10,7 @@ import Card from '@/components/Card/index';
 import Content from '@/components/Content/index';
 import Meta from '@/components/Meta';
 import Modal from '@/components/Modal/index';
+import UserProfile from '@/components/UserProfile';
 import { AccountLayout } from '@/layouts/index';
 import api from '@/lib/common/api';
 import { getUser } from '@/prisma/services/user';
@@ -165,6 +166,12 @@ const Settings = ({ user }) => {
             </Card.Footer>
           </form>
         </Card>
+        {/* UserProfile integration */}
+        <Card>
+          <Card.Body title={t("settings.profile.userProfile.title")}>
+            <UserProfile />
+          </Card.Body>
+        </Card>
         <Card>
           <Card.Body
             title={t("settings.profile.personal.account.id")}
@@ -235,7 +242,16 @@ const Settings = ({ user }) => {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
-  const { email, name, userCode } = await getUser(session.user?.userId);
+  if (!session || !session.user) {
+    // Redirect to login if session or user does not exist
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  const { email, name, userCode } = await getUser(session.user.userId);
   return {
     props: {
       user: {

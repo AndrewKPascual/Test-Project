@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 const UserProfile = () => {
+  const { data: session } = useSession();
   const [profile, setProfile] = useState({
-    // Removed userId as it will be retrieved from the user session
     healthGoals: '',
     dietaryPreferences: ''
   });
@@ -15,7 +16,6 @@ const UserProfile = () => {
 
   const validateForm = () => {
     let tempErrors = {};
-    // Removed validation for userId
     tempErrors.healthGoals = profile.healthGoals ? "" : "Health goals are required.";
     tempErrors.dietaryPreferences = profile.dietaryPreferences ? "" : "Dietary preferences are required.";
     setErrors({...tempErrors});
@@ -34,8 +34,11 @@ const UserProfile = () => {
     e.preventDefault();
     if(validateForm()) {
       try {
-        // Assume userId is retrieved from the user session and added to the profile object before submission
-        const userId = 'retrieved-from-session'; // Placeholder for actual session retrieval logic
+        // Retrieve userId from the session
+        const userId = session?.user?.id; // Assuming the session object has a user object with an id
+        if (!userId) {
+          throw new Error('No user ID found in session.');
+        }
         const submissionData = { ...profile, userId };
 
         const response = await fetch('/api/userProfile', {
@@ -70,7 +73,6 @@ const UserProfile = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Removed User ID input field */}
       <div>
         <label htmlFor="healthGoals">Health Goals</label>
         <input
