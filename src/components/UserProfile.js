@@ -2,15 +2,22 @@ import React, { useState } from 'react';
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({
+    // Removed userId as it will be retrieved from the user session
     healthGoals: '',
     dietaryPreferences: ''
   });
   const [errors, setErrors] = useState({});
+  const [submissionStatus, setSubmissionStatus] = useState({
+    success: false,
+    error: false,
+    message: ''
+  });
 
   const validateForm = () => {
     let tempErrors = {};
-    tempErrors.healthGoals = profile.healthGoals ? "" : "This field is required.";
-    tempErrors.dietaryPreferences = profile.dietaryPreferences ? "" : "This field is required.";
+    // Removed validation for userId
+    tempErrors.healthGoals = profile.healthGoals ? "" : "Health goals are required.";
+    tempErrors.dietaryPreferences = profile.dietaryPreferences ? "" : "Dietary preferences are required.";
     setErrors({...tempErrors});
     return Object.values(tempErrors).every(x => x === "");
   };
@@ -27,14 +34,16 @@ const UserProfile = () => {
     e.preventDefault();
     if(validateForm()) {
       try {
-        // Replace with actual API endpoint and adjust HTTP method, headers, and body as needed
-        const response = await fetch('/api/user-profile', {
+        // Assume userId is retrieved from the user session and added to the profile object before submission
+        const userId = 'retrieved-from-session'; // Placeholder for actual session retrieval logic
+        const submissionData = { ...profile, userId };
+
+        const response = await fetch('/api/userProfile', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Include other headers as required by the backend API
           },
-          body: JSON.stringify(profile)
+          body: JSON.stringify(submissionData)
         });
 
         if (!response.ok) {
@@ -43,16 +52,25 @@ const UserProfile = () => {
 
         const data = await response.json();
         console.log('Profile submitted:', data);
-        // Handle successful profile submission, e.g., display a success message, redirect, etc.
+        setSubmissionStatus({
+          success: true,
+          error: false,
+          message: 'Profile updated successfully!'
+        });
       } catch (error) {
         console.error('Error submitting profile:', error);
-        // Handle errors in profile submission, e.g., display an error message
+        setSubmissionStatus({
+          success: false,
+          error: true,
+          message: 'An error occurred while updating the profile.'
+        });
       }
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* Removed User ID input field */}
       <div>
         <label htmlFor="healthGoals">Health Goals</label>
         <input
@@ -77,6 +95,14 @@ const UserProfile = () => {
         />
         {errors.dietaryPreferences && <p className="text-error">{errors.dietaryPreferences}</p>}
       </div>
+      {submissionStatus.message && (
+        <p
+          className={`text-${submissionStatus.error ? 'error' : 'success'}`}
+          aria-live="assertive"
+        >
+          {submissionStatus.message}
+        </p>
+      )}
       <button type="submit">Save Profile</button>
     </form>
   );
