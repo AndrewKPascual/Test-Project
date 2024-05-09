@@ -23,11 +23,31 @@ const UserProfile = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if(validateForm()) {
-      // TODO: Implement the submit logic, possibly sending the profile data to the backend
-      console.log('Profile submitted:', profile);
+      try {
+        // Replace with actual API endpoint and adjust HTTP method, headers, and body as needed
+        const response = await fetch('/api/user-profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Include other headers as required by the backend API
+          },
+          body: JSON.stringify(profile)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Profile submitted:', data);
+        // Handle successful profile submission, e.g., display a success message, redirect, etc.
+      } catch (error) {
+        console.error('Error submitting profile:', error);
+        // Handle errors in profile submission, e.g., display an error message
+      }
     }
   };
 
@@ -41,9 +61,9 @@ const UserProfile = () => {
           name="healthGoals"
           value={profile.healthGoals}
           onChange={handleChange}
-          className={errors.healthGoals ? 'error' : ''}
+          className={errors.healthGoals ? 'border-error text-error' : ''}
         />
-        {errors.healthGoals && <p className="error-text">{errors.healthGoals}</p>}
+        {errors.healthGoals && <p className="text-error">{errors.healthGoals}</p>}
       </div>
       <div>
         <label htmlFor="dietaryPreferences">Dietary Preferences</label>
@@ -53,9 +73,9 @@ const UserProfile = () => {
           name="dietaryPreferences"
           value={profile.dietaryPreferences}
           onChange={handleChange}
-          className={errors.dietaryPreferences ? 'error' : ''}
+          className={errors.dietaryPreferences ? 'border-error text-error' : ''}
         />
-        {errors.dietaryPreferences && <p className="error-text">{errors.dietaryPreferences}</p>}
+        {errors.dietaryPreferences && <p className="text-error">{errors.dietaryPreferences}</p>}
       </div>
       <button type="submit">Save Profile</button>
     </form>
