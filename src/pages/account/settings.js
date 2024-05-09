@@ -251,7 +251,19 @@ export const getServerSideProps = async (context) => {
       },
     };
   }
-  const { email, name, userCode } = await getUser(session.user.userId);
+  const user = await getUser(session.user.userId);
+  // Check if the user data was returned from the getUser call
+  if (!user) {
+    // Redirect to login if user data does not exist
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  // Now we are sure user exists, we can safely destructure its properties
+  const { email, name, userCode } = user;
   return {
     props: {
       user: {
