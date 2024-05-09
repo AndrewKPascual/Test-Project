@@ -10,12 +10,14 @@ datasource db {
 
 // ... (other models remain unchanged)
 
-// New UserProfile model
+// Updated UserProfile model with level and badges
 model UserProfile {
   id                 String   @id @default(cuid())
   userId             String   @unique
   healthGoals        String?
   dietaryPreferences String?
+  level              Int      @default(0)
+  badges             String[] @default([])
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
