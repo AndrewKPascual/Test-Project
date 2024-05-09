@@ -45,4 +45,10 @@ model Workspace {
   @@map("workspaces")
 }
 
+// TeamRole enum definition
+enum TeamRole {
+  MEMBER
+  ADMIN
+}
+
 // ... (rest of the file remains unchanged)

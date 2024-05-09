@@ -5,24 +5,33 @@ const LevelingSystem = () => {
   const [level, setLevel] = useState(0);
   const [badges, setBadges] = useState([]);
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState(null);
 
-  // Placeholder function to simulate fetching data from the backend
+  // Function to fetch level and badges data from the backend
   const fetchLevelData = async () => {
-    // TODO: Replace with actual API call
-    const mockData = {
-      level: 3,
-      progress: 75, // Progress percentage towards the next level
-      badges: ['Starter', '5-Day Streak', 'Hydration Master'],
-    };
-    setLevel(mockData.level);
-    setProgress(mockData.progress);
-    setBadges(mockData.badges);
+    try {
+      const response = await fetch('/api/leveling');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setLevel(data.level);
+      setProgress(data.progress); // Assuming the API returns progress
+      setBadges(data.badges);
+    } catch (e) {
+      setError(e.message);
+      console.error('Fetch error:', e.message);
+    }
   };
 
   useEffect(() => {
     // Fetch level and badges data when the component mounts
     fetchLevelData();
   }, []);
+
+  if (error) {
+    return <div>Error fetching data: {error}</div>;
+  }
 
   return (
     <div className="bg-white shadow-sm rounded-lg p-4">
