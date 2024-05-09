@@ -25,9 +25,11 @@ export default async function handler(req, res) {
       }
 
       // Create new user profile in the database
-      const userProfile = await prisma.UserProfile.create({
+      const userProfile = await prisma.userProfile.create({
         data: {
-          userId,
+          user: {
+            connect: { id: userId },
+          },
           healthGoals,
           dietaryPreferences,
         },
