@@ -256,7 +256,7 @@ async function fetchUserData(userId) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
-  console.log('Session data:', session); // Added logging for session data
+  console.log('Session data:', JSON.stringify(session, null, 2)); // Enhanced logging for session data
 
   if (!session || !session.user) {
     // Redirect to login if session or user does not exist
@@ -270,7 +270,7 @@ export const getServerSideProps = async (context) => {
 
   // Fetch user data based on the session information
   const userData = await fetchUserData(session.user.userId);
-  console.log('Fetched user data:', userData); // Added logging for fetched user data
+  console.log('Fetched user data response:', JSON.stringify(userData, null, 2)); // Enhanced logging for fetched user data
 
   if (!userData) {
     // Handle the case where user data could not be fetched
