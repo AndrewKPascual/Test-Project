@@ -240,6 +240,20 @@ const Settings = ({ user }) => {
   );
 };
 
+// Fetch user data based on the session information
+async function fetchUserData(userId) {
+  try {
+    const response = await fetch(`/api/user/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user data: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('fetchUserData error:', error);
+    return null;
+  }
+}
+
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
 
