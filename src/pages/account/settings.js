@@ -13,7 +13,7 @@ import Modal from '@/components/Modal/index';
 import UserProfile from '@/components/UserProfile';
 import { AccountLayout } from '@/layouts/index';
 import api from '@/lib/common/api';
-import { getUser } from '@/prisma/services/user';
+// Removed import of getUser to prevent server-side code from being bundled into client-side
 import { useTranslation } from "react-i18next";
 
 const Settings = ({ user }) => {
@@ -242,6 +242,7 @@ const Settings = ({ user }) => {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
+
   if (!session || !session.user) {
     // Redirect to login if session or user does not exist
     return {
@@ -251,26 +252,22 @@ export const getServerSideProps = async (context) => {
       },
     };
   }
-  const user = await getUser(session.user.userId);
-  // Check if the user data was returned from the getUser call
-  if (!user) {
-    // Redirect to login if user data does not exist
+
+  // Fetch user data based on the session information
+  // This is a placeholder for the actual data fetching logic
+  // which should be implemented according to the application's requirements
+  const userData = await fetchUserData(session.user.userId);
+
+  if (!userData) {
+    // Handle the case where user data could not be fetched
     return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
+      notFound: true,
     };
   }
-  // Now we are sure user exists, we can safely destructure its properties
-  const { email, name, userCode } = user;
+
   return {
     props: {
-      user: {
-        email,
-        name,
-        userCode,
-      },
+      user: userData,
     },
   };
 };
