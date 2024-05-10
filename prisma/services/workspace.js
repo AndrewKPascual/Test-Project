@@ -65,7 +65,6 @@ export const getInvitation = async (inviteCode) =>
   await prisma.workspace.findFirst({
     select: {
       id: true,
-      name: true,
       workspaceCode: true,
       slug: true,
     },
@@ -80,7 +79,6 @@ export const getOwnWorkspace = async (id, email, slug) =>
     select: {
       id: true,
       inviteCode: true,
-      name: true,
     },
     where: {
       OR: [
@@ -102,29 +100,17 @@ export const getOwnWorkspace = async (id, email, slug) =>
     },
   });
 
-export const getSiteWorkspace = async (slug, customDomain) =>
+export const getSiteWorkspace = async (slug) =>
   await prisma.workspace.findFirst({
     select: {
       id: true,
-      name: true,
+      workspaceCode: true,
+      inviteCode: true,
       slug: true,
-      domains: { select: { name: true } },
     },
     where: {
-      OR: [
-        { slug },
-        customDomain
-          ? {
-              domains: {
-                some: {
-                  name: slug,
-                  deletedAt: null,
-                },
-              },
-            }
-          : undefined,
-      ],
-      AND: { deletedAt: null },
+      slug,
+      deletedAt: null,
     },
   });
 
@@ -132,7 +118,6 @@ export const getWorkspace = async (id, email, slug) =>
   await prisma.workspace.findFirst({
     select: {
       creatorId: true,
-      name: true,
       inviteCode: true,
       slug: true,
       workspaceCode: true,
@@ -188,7 +173,6 @@ export const getWorkspaces = async (id, email) =>
           teamRole: true,
         },
       },
-      name: true,
       slug: true,
       workspaceCode: true,
     },
