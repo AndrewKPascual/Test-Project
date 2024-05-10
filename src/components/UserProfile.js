@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 const UserProfile = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
   const [profile, setProfile] = useState({
     healthGoals: '',
     dietaryPreferences: ''
@@ -65,11 +66,19 @@ const UserProfile = () => {
         setSubmissionStatus({
           success: false,
           error: true,
-          message: 'An error occurred while updating the profile.'
+          message: error.message
         });
       }
     }
   };
+
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "unauthenticated") {
+    return <p>You must be logged in to view this page.</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
