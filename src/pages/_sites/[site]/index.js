@@ -18,34 +18,16 @@ const Site = ({ workspace }) => {
 
   return workspace ? (
     <main className="relative flex flex-col items-center justify-center h-screen space-y-10 text-gray-800 bg-gray-50">
-      <Meta title={workspace.name} />
+      <Meta title={workspace.slug} />
       <div className="flex flex-col items-center justify-center p-10 space-y-5 text-center ">
         <h1 className="text-4xl font-bold">
           Welcome to your workspace&apos;s subdomain!
         </h1>
         <h2 className="text-2xl">
-          This is the workspace of <strong>{workspace.name}.</strong>
+          This is the workspace with the slug <strong>{workspace.slug}.</strong>
         </h2>
         <p>You can also visit these links:</p>
-        <Link
-          href={`https://${workspace.hostname}`}
-          className="flex space-x-3 text-blue-600 hover:underline"
-          target="_blank"
-        >
-          <span>{`${workspace.hostname}`}</span>
-          <ArrowTopRightOnSquareIcon className="w-5 h-5" />
-        </Link>
-        {workspace.domains.map((domain, index) => (
-          <Link
-            key={index}
-            href={`https://${domain.name}`}
-            className="flex space-x-3 text-blue-600 hover:underline"
-            target="_blank"
-          >
-            <span>{domain.name}</span>
-            <ArrowTopRightOnSquareIcon className="w-5 h-5" />
-          </Link>
-        ))}
+        {/* Removed the mapping over domains as it no longer exists in the schema */}
       </div>
     </main>
   ) : (
@@ -72,8 +54,9 @@ export const getStaticProps = async ({ params }) => {
   if (siteWorkspace) {
     const { host } = new URL(process.env.APP_URL);
     workspace = {
-      domains: siteWorkspace.domains,
-      name: siteWorkspace.name,
+      // Removed the domains field
+      slug: siteWorkspace.slug,
+      // Removed the name field
       hostname: `${siteWorkspace.slug}.${host}`,
     };
   }
